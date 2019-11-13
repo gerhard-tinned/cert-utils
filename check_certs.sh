@@ -26,12 +26,33 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+function usage
+{
+  echo "Usage: `basename $0` [-h|--help] <destination|filename> [openssl-options]"
+  echo ""
+  echo "Options:"
+  echo "  -h, --help       Print this usage and exit"
+  echo "  destination      Connect string used by openssl s-client to connect to."
+  echo "  filename         Filename to read certificates from."
+  echo "  openssl-options  Openssl x509 options to show required details for the certificates."
+  echo "                   Default: -subject -issuer -email -dates -fingerprint -noout"
+  echo ""
+  exit 1
+}
+
 if [ $# -lt 1 ]; then
-  echo "ERROR: at least one argument (destination) required" 
+  echo "ERROR: at least one argument (destination or local filename) required."
+  usage
   exit 1
 fi
 
-CCURL=$1
+if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+  usage
+elif [ -r "$1" ]; then 
+  CCMD=$(cat "$1")
+else
+  CCMD=$(echo | openssl s_client -connect $1 -showcerts)
+fi
 
 shift
 if [ ! -z "$*" ]; then
@@ -42,7 +63,7 @@ fi
 
 FILETMP=$(mktemp)
 
-echo | openssl s_client -connect ${CCURL} -showcerts | \
+echo -e "${CCMD}" | \
     awk -v SSLOPTS="${SSLOPTS}" -v FILETMP="${FILETMP}" '
         /-----BEGIN CERTIFICATE-----/,/-----END CERTIFICATE-----/ \
             {
