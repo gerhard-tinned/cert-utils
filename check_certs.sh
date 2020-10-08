@@ -32,7 +32,8 @@ function usage
   echo ""
   echo "Options:"
   echo "  -h, --help       Print this usage and exit"
-  echo "  destination      Connect string used by openssl s-client to connect to."
+  echo "  --tls protocol   The starttls protocol used by s_client --starttls"
+  echo "  destination      Connect string used by openssl s_client to connect to."
   echo "  filename         Filename to read certificates from."
   echo "  openssl-options  Openssl x509 options to show required details for the certificates."
   echo "                   Default: -subject -issuer -email -dates -fingerprint -noout"
@@ -46,12 +47,19 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+
 if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
   usage
-elif [ -r "$1" ]; then 
+  exit 0;
+fi
+if [ "$1" == "--tls" ]; then
+  CCMD_OPTION="-starttls $2"
+  shift 2
+fi
+if [ -r "$1" ]; then
   CCMD=$(cat "$1")
 else
-  CCMD=$(echo | openssl s_client -connect $1 -showcerts)
+  CCMD=$(echo | openssl s_client -connect $1 -showcerts ${CCMD_OPTION})
 fi
 
 shift
