@@ -28,7 +28,7 @@
 
 function usage
 {
-  echo "Usage: `basename $0` [-h|--help] <destination|filename> [openssl-options]"
+  echo "Usage: `basename $0` [-h|--help] [--tls protocol] <destination|filename> [openssl-options]"
   echo ""
   echo "Options:"
   echo "  -h, --help       Print this usage and exit"
