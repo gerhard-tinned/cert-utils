@@ -33,6 +33,7 @@ function usage
   echo "Options:"
   echo "  -h, --help       Print this usage and exit"
   echo "  --tls protocol   The starttls protocol used by s_client --starttls"
+  echo "                   'smtp', 'pop3', 'imap', 'ldap', ... see all in the s_client(1) man page"
   echo "  destination      Connect string used by openssl s_client to connect to."
   echo "  filename         Filename to read certificates from."
   echo "  openssl-options  Openssl x509 options to show required details for the certificates."
