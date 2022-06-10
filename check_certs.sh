@@ -2,7 +2,7 @@
 #
 # BSD 2-Clause License
 # 
-# Copyright (c) 2019, cs@brnfck.at and gerhard@tinne-software.net
+# Copyright (c) 2019-2022, cs@brnfck.at and gerhard@tinned-software.net
 # All rights reserved.
 # 
 # Redistribution and use in source and binary forms, with or without
@@ -25,6 +25,10 @@
 # CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+VERSION=0.1.3
+#
+
 
 function usage
 {
@@ -32,6 +36,7 @@ function usage
   echo ""
   echo "Options:"
   echo "  -h, --help       Print this usage and exit"
+  echo "  -v  --version           Print version information and exit"
   echo "  --tls protocol   The starttls protocol used by s_client --starttls"
   echo "                   'smtp', 'pop3', 'imap', 'ldap', ... see all in the s_client(1) man page"
   echo "  destination      Connect string used by openssl s_client to connect to."
@@ -39,7 +44,16 @@ function usage
   echo "  openssl-options  Openssl x509 options to show required details for the certificates."
   echo "                   Default: -subject -issuer -email -dates -fingerprint -noout"
   echo ""
-  exit 1
+}
+
+function version
+{
+  echo 
+  echo "`basename $0` Version $VERSION"
+  echo
+  echo "Copyright (c) 2019-2022 cs@brnfck.at and gerhard@tinned-software.net"
+  echo "BSD 2-Clause License <https://opensource.org/licenses/BSD-2-Clause>"
+  echo 
 }
 
 if [ $# -lt 1 ]; then
@@ -48,6 +62,10 @@ if [ $# -lt 1 ]; then
   exit 1
 fi
 
+if [ "$1" == "--version" ] || [ "$1" == "-v" ]; then
+  version
+  exit 0;
+fi
 
 if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
   usage
