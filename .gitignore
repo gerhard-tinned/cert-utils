@@ -1,0 +1,9 @@
+# ignore MACOSX related files
+.DS_Store
+._*
+
+test/*.pem
+test/*.csr
+test/*.srl 
+test/ca-serial*
+test/ca-certindex.txt*
