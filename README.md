@@ -14,7 +14,7 @@ Usage: check_certs.sh [-h|--help] [--tls protocol] <destination|filename> [opens
 
 Options:
   -h, --help       Print this usage and exit
-  -v  --version           Print version information and exit
+  -v  --version    Print version information and exit
   --tls protocol   The starttls protocol used by s_client --starttls
                    'smtp', 'pop3', 'imap', 'ldap', ... see all in the s_client(1) man page
   destination      Connect string used by openssl s_client to connect to.
@@ -64,3 +64,25 @@ Usage: generate-test-certs.sh [-h] [--clean]
   -h  --help               Print this usage and exit
       --clean              Remove all test files generated
 ```
+
+## cipher-test.sh
+
+A simple script to test which ciphers a ssl/tls enabled service supports. It starts my retrieving a list of all ciphers supported in the local openssl installation. This list is used to connect to the provided destination.
+
+Due to differences in the openssl versions, the script will go through the protocol versions SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2 and finally TLSv1.3. For each supported protocol version, all the supported ciphers for this version are checked. 
+
+For simpler parsing, the output is divided into success messages reported via stdout and failed ciphers are reported via stderr in the shell output.
+
+```
+Usage: cipher-test.sh [-hv] [--tls protocol] [--out DIR] hostname:port
+  -h  --help              print this usage and exit
+  -v  --version           print version information and exit
+      --tls protocol      The starttls protocol used by s_client --starttls
+                          'smtp', 'pop3', 'imap', 'ldap', ... see all in the s_client(1) man page
+      --out DIR           Set the output directory for the openssl output.
+      hostname:port       Connect string used by openssl s_client to connect to.
+```
+
+The "--tls" argument allows to control the "startssl" behaviour used by openssl to connect. 
+
+With the "--out" directory set, the script will place the output of every connection attempt in this directory. If this option is used, the output files will remain after the script terminates.
